@@ -1,0 +1,31 @@
+﻿@model aspnet.Models.GuestResponse
+
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>RsvpForm</title>
+</head>
+<body>
+    <div> 
+        @using (Html.BeginForm())
+        {
+            <p>Your name: @Html.TextBoxFor(x => x.Name)</p>
+            <p>Your e-mail address: @Html.TextBoxFor(x => x.Email)</p>
+            <p>Your phone number: @Html.TextBoxFor(x => x.Phone)</p>
+            <p>Are you coming?
+                @Html.DropDownListFor(x => x.WillAttend, new[] {
+                    new SelectListItem() { Text = "Yes, sure will!", Value = Boolean.TrueString},
+                    new SelectListItem() { Text = "No, I sadly won't", Value = Boolean.FalseString}
+                })
+                </p>
+            <input type="submit" value="Submit my response" />
+        }
+    </div>
+</body>
+</html>
