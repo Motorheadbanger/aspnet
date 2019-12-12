@@ -10,18 +10,42 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>Thanks</title>
+    <link href="~/Content/bootstrap.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap-theme.css" rel="stylesheet" />
+    <style>
+        body { background: #f1f1f1; }
+    </style>
 </head>
 <body>
-    <div> 
+    @{ 
+        try
+        {
+            WebMail.SmtpServer = "smtp.example.com";
+            WebMail.SmtpPort = 587;
+            WebMail.EnableSsl = true;
+            WebMail.UserName = "mySmtpUsername";
+            WebMail.Password = "mySmtpPassword";
+            WebMail.From = "a@a.org";
+
+            WebMail.Send("a@a.org", "RSVP invite", Model.Name + ((Model.WillAttend ?? false) ? " is " : "not ") + "coming");
+        }
+        catch (Exception)
+        {
+            @:<b>Unfortelny message fail</b>
+        }
+    }
+    <div class="text-center"> 
         <h1>Thank you, @Model.Name!</h1>
-        @if (Model.WillAttend == true)
-        {
-            @:It's nice of you to come
-        }
-        else
-        {
-            @:What a pity! Thanks for letting us know.
-        }
+        <div class="lead">
+            @if (Model.WillAttend == true)
+            {
+                @:It's nice of you to come
+            }
+            else
+            {
+                @:What a pity! Thanks for letting us know.
+            }
+        </div>
     </div>
 </body>
 </html>
