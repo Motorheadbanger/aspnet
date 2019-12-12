@@ -89,6 +89,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
+    <Content Include="Content\Styles.css" />
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
