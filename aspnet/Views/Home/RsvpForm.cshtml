@@ -22,29 +22,71 @@
         <div class="panel-body">
             @using (Html.BeginForm())
             {
-                @Html.ValidationSummary()
+
                 <div class="form-group">
                     <label>Thine name:</label>
-                    <p>Your name: @Html.TextBoxFor(x => x.Name)</p>
+                    <p>Your name: @Html.TextBoxFor(x => x.Name, htmlAttributes: new { id = "name", onchange = "checkValidity()" })</p>
                 </div>
                 <div class="form-group">
                     <label>Your e-mail name:</label>
-                    <p>Your e-mail address: @Html.TextBoxFor(x => x.Email)</p>
+                    <p>Your e-mail address: @Html.TextBoxFor(x => x.Email, htmlAttributes: new { id = "email", onchange = "checkValidity()" })</p>
                 </div>
                 <div class="form-group">
                     <label>Your phone name:</label>
-                    <p>Your phone number: @Html.TextBoxFor(x => x.Phone)</p>
+                    <p>Your phone number: @Html.TextBoxFor(x => x.Phone, htmlAttributes: new { id = "phone", onchange = "checkValidity()" })</p>
                 </div>
                 <div class="form-group">
                     <label>u comin?</label>
-                        @Html.DropDownListFor(x => x.WillAttend, new[] {
-                            new SelectListItem() { Text = "Yes, sure will!", Value = Boolean.TrueString},
-                            new SelectListItem() { Text = "No, I sadly won't", Value = Boolean.FalseString}
-                        }, "Choose an option", new { @class = "form-control" })
+                    @Html.DropDownListFor(x => x.WillAttend, new[] {
+                        new SelectListItem() { Text = "Yes, sure will!", Value = Boolean.TrueString},
+                        new SelectListItem() { Text = "No, I sadly won't", Value = Boolean.FalseString}
+                    }, "Choose an option", new { @class = "form-control", id = "attendance", onchange = "checkValidity()" })
                 </div>
                 <div class="text-center">
-                    <input type="submit" value="Submit my response" class="btn btn-success" />
+                    <input type="submit" id="submitButton" value="Submit my response" class="btn btn-success" />
                 </div>
+                <script>
+                    var submitButton = document.getElementById("submitButton");
+                    submitButton.disabled = true;
+                    
+                    function checkName() {
+                        if (!(document.getElementById("name").value == ""))
+                            return true;
+                        else
+                            return false;
+                    }
+
+                    function checkEmail() {
+                        if (!(document.getElementById("email").value == ""))
+                            return true;
+                        else
+                            return false;
+                    }
+
+                    function checkPhone() {
+                        if (!(document.getElementById("phone").value == ""))
+                            return true;
+                        else
+                            return false;
+                    }
+
+                    function checkAttendance() {
+                        var optionsList = document.getElementById("attendance");
+                        var selectedValue = optionsList.options[optionsList.selectedIndex].text;
+                        if (!(selectedValue == "Choose an option"))
+                            return true;
+                        else
+                            return false;
+                    }
+
+                    function checkValidity() {
+                        if (checkName() && checkEmail() && checkPhone() && checkAttendance()) {
+                            submitButton.removeAttribute("disabled");
+                            return true;
+                        }
+                        else return false;
+                    }
+                </script>
             }
         </div>
     </div>

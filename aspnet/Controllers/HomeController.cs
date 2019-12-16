@@ -26,10 +26,7 @@ namespace aspnet.Controllers
         [HttpPost]
         public ViewResult RsvpForm(GuestResponse guest)
         {
-            if (ModelState.IsValid)
                 return View("Thanks", guest);
-            else
-                return View();
         }
     }
 }
