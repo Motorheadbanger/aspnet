@@ -25,66 +25,93 @@
 
                 <div class="form-group">
                     <label>Thine name:</label>
-                    <p>Your name: @Html.TextBoxFor(x => x.Name, htmlAttributes: new { id = "name", onchange = "checkValidity()" })</p>
+                    <p>Your name: @Html.TextBoxFor(x => x.Name, htmlAttributes: new { id="name" })</p>
                 </div>
                 <div class="form-group">
                     <label>Your e-mail name:</label>
-                    <p>Your e-mail address: @Html.TextBoxFor(x => x.Email, htmlAttributes: new { id = "email", onchange = "checkValidity()" })</p>
+                    <p>Your e-mail address: @Html.TextBoxFor(x => x.Email, htmlAttributes: new { id="email" })</p>
                 </div>
                 <div class="form-group">
                     <label>Your phone name:</label>
-                    <p>Your phone number: @Html.TextBoxFor(x => x.Phone, htmlAttributes: new { id = "phone", onchange = "checkValidity()" })</p>
+                    <p>Your phone number: @Html.TextBoxFor(x => x.Phone, htmlAttributes: new { id="phone" })</p>
                 </div>
                 <div class="form-group">
                     <label>u comin?</label>
                     @Html.DropDownListFor(x => x.WillAttend, new[] {
                         new SelectListItem() { Text = "Yes, sure will!", Value = Boolean.TrueString},
                         new SelectListItem() { Text = "No, I sadly won't", Value = Boolean.FalseString}
-                    }, "Choose an option", new { @class = "form-control", id = "attendance", onchange = "checkValidity()" })
+                    }, "Choose an option", new { @class = "form-control", id="attendance" })
                 </div>
                 <div class="text-center">
-                    <input type="submit" id="submitButton" value="Submit my response" class="btn btn-success" />
+                    <input type="button" id="submitButton" value="Submit my response" class="btn btn-success"/>
                 </div>
                 <script>
-                    var submitButton = document.getElementById("submitButton");
-                    submitButton.disabled = true;
-                    
-                    function checkName() {
-                        if (!(document.getElementById("name").value == ""))
-                            return true;
-                        else
-                            return false;
-                    }
+                    const submitButton = document.getElementById("submitButton");
+                    const game = document.getElementById("name");
+                    const phone = document.getElementById("phone");
+                    const email = document.getElementById("email");
+                    const attendance = document.getElementById("attendance");
+                    var isFormValid = true;
 
-                    function checkEmail() {
-                        if (!(document.getElementById("email").value == ""))
-                            return true;
-                        else
-                            return false;
-                    }
+                    game.addEventListener("change", checkFieldValidity);
+                    phone.addEventListener("change", checkFieldValidity);
+                    email.addEventListener("change", checkFieldValidity);
+                    email.addEventListener("change", checkEmail);
+                    attendance.addEventListener("change", checkFieldValidity);
+                    submitButton.addEventListener("click", checkFormValidity);
 
-                    function checkPhone() {
-                        if (!(document.getElementById("phone").value == ""))
-                            return true;
-                        else
-                            return false;
-                    }
-
-                    function checkAttendance() {
-                        var optionsList = document.getElementById("attendance");
-                        var selectedValue = optionsList.options[optionsList.selectedIndex].text;
-                        if (!(selectedValue == "Choose an option"))
-                            return true;
-                        else
-                            return false;
-                    }
-
-                    function checkValidity() {
-                        if (checkName() && checkEmail() && checkPhone() && checkAttendance()) {
-                            submitButton.removeAttribute("disabled");
-                            return true;
+                    function checkFieldValidity()
+                    {
+                        if (this.value == "")
+                        {
+                            validationWarning(this);
+                            isFormValid = false;
                         }
-                        else return false;
+                        else
+                        {
+                            this.style.borderColor = '';
+                            isFormValid = true;
+                            removeWarning(this.id);
+                        }
+                    }
+
+                    function checkEmail()
+                    {
+                        if (this.value != "" && !this.value.match(".+@@.+\..{2,3}")) validationWarning(this);
+                    }
+
+                    function validationWarning(element)
+                    {
+                        element.style.borderColor = 'red';
+                        element.style.borderWidth = '1';
+                        var warningTextId;
+                        var warningTextDiv;
+
+                        if (element.id != "email") {
+                            warningTextId = "invalid " + element.id;
+                            warningTextDiv = '<div id="invalid ' + element.id + '" style="color:red"> Cannot be empty</div>'
+                        }
+                        else {
+                            warningTextId = "invalid format " + element.id;
+                            warningTextDiv = '<div id="invalid format email" style="color:red"> Invalid e-mail address</div>'
+                        }
+
+                        if (document.getElementById(warningTextId) == null) element.insertAdjacentHTML('afterend', warningTextDiv);
+                    }
+
+                    function removeWarning(id) {
+                        if (id != "email" && document.getElementById("invalid " + id) != null) document.getElementById("invalid " + id).parentNode.removeChild(document.getElementById("invalid " + id));
+                        else if (document.getElementById("invalid format email") != null) document.getElementById("invalid format email").parentNode.removeChild(document.getElementById("invalid format email"));
+                    }
+
+                    function checkFormValidity()
+                    {
+                        checkEmail();
+                        checkFieldValidity();
+                        checkFieldValidity();
+                        checkFieldValidity();
+                        checkFieldValidity();
+                        if (isFormValid) window.location.href = "@Url.Action("Result", "Thanks")";
                     }
                 </script>
             }

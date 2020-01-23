@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using aspnet.Models;
 
@@ -26,7 +23,7 @@ namespace aspnet.Controllers
         [HttpPost]
         public ViewResult RsvpForm(GuestResponse guest)
         {
-                return View("Thanks", guest);
+            return View("Thanks", guest);
         }
     }
 }
